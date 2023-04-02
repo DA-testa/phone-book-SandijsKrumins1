@@ -16,15 +16,18 @@ def write_responses(result):
 
 def process_queries(queries):
     result = []
-    contacts = [None]*10**8
-    for cur_query in queries:
-        if cur_query.type == 'add':
-            contacts[cur_query.number] = cur_query.name
-        elif cur_query.type == 'del':
-            contacts[cur_query.number] = None
-        else:
-            name = contacts[cur_query.number]
-            result.append('not found' if name is None else name)
+    contacts = {}
+    for c_query in queries:
+        if c_query.type == "add":
+           contacts[c_query.number] = c_query.name
+        elif c_query.type == "del":
+            if c_query.number in contacts:
+                del contacts[c_query.number]
+        elif c_query.type == "find":
+            name = contacts.get(c_query.number, "not found")
+            result.append(name)
+            
+
     return result
 
 if __name__ == '__main__':
